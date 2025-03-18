@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.prs.db.LineItemRepo;
+import com.prs.db.ProductRepo;
+import com.prs.db.RequestRepo;
 import com.prs.model.LineItem;
 import com.prs.model.Request;
 
@@ -16,10 +18,14 @@ import com.prs.model.Request;
 @RestController
 @RequestMapping("api/lineitems")
 public class LineItemController {
-	
+
 	@Autowired
 	private LineItemRepo lineItemRepo;
-	
+	@Autowired
+	private RequestRepo requestRepo;
+	@Autowired
+	private ProductRepo productRepo;
+		
 	@GetMapping("/")
 	public List<LineItem> getAll() {
 		return lineItemRepo.findAll();
@@ -37,8 +43,13 @@ public class LineItemController {
 	
 	@PostMapping("")
 	public LineItem add(@RequestBody LineItem lineItem) {
-		return lineItemRepo.save(lineItem);
-		
+		LineItem li = new LineItem();
+		li.setProduct(productRepo.findById(lineItem.getProduct().getId()).get());
+		li.setRequest(requestRepo.findById(lineItem.getRequest().getId()).get());
+		li.setQuantity(lineItem.getQuantity());
+		lineItemRepo.save(li);
+		RecalculateRequestTotal(lineItem.getRequest().getId());
+		return li;
 	}
 	
 	@PutMapping("/{id}")
@@ -71,6 +82,13 @@ public class LineItemController {
 	}
 	
 	private void RecalculateRequestTotal(int reqId) {
-		
+		Request request = requestRepo.findById(reqId).get();
+		List<LineItem> lineItems = lineItemRepo.findAllLineItemsByRequestId(reqId);
+		double total = 0.0;
+		for (LineItem lineItem : lineItems) {
+			total += lineItem.product.getPrice()*lineItem.quantity;
+		}
+		request.setTotal(total);
+		requestRepo.save(request);
 	}
 }
