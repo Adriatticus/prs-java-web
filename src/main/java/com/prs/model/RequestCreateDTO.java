@@ -21,14 +21,6 @@ public class RequestCreateDTO {
 			super();
 		}
 
-//		public String getRequestNumber() {
-//			return requestNumber;
-//		}
-		
-//		public void setRequestNumber(String requestNumber) {
-//			this.requestNumber = requestNumber;
-//		}
-		
 		public User getUser() {
 			return user;
 		}

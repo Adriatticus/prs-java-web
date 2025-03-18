@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.prs.db.UserRepo;
 import com.prs.model.User;
+import com.prs.model.UserLoginDTO;
 
 @CrossOrigin
 @RestController
@@ -65,6 +66,17 @@ public class UserController {
 			userRepo.deleteById(id);
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for id, "+id+".");
+		}
+	}
+	
+	@PostMapping("/login")
+	public User add(@RequestBody UserLoginDTO userLogin) {
+		User user = userRepo.findByUsernameAndPassword(userLogin.username, userLogin.password);
+		if (user == null) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid username and/or password");
+		}
+		else {
+			return user;			
 		}
 	}
 

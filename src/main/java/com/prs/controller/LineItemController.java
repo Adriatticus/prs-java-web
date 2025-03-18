@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.prs.db.LineItemRepo;
 import com.prs.model.LineItem;
+import com.prs.model.Request;
 
 @CrossOrigin
 @RestController
@@ -37,6 +38,7 @@ public class LineItemController {
 	@PostMapping("")
 	public LineItem add(@RequestBody LineItem lineItem) {
 		return lineItemRepo.save(lineItem);
+		
 	}
 	
 	@PutMapping("/{id}")
@@ -57,5 +59,18 @@ public class LineItemController {
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Line item not found for id, "+id+".");
 		}
+	}
+	
+	@GetMapping("/lines-for-req/{reqId}")
+	public List<LineItem> getLineItemsByReq(@PathVariable int reqId) {
+		List<LineItem> li = lineItemRepo.findAllLineItemsByRequestId(reqId);
+		if (li.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request may be invalid or a valid request may have no line items.");
+		}
+		return li;
+	}
+	
+	private void RecalculateRequestTotal(int reqId) {
+		
 	}
 }

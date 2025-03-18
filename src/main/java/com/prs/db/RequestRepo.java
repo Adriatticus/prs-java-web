@@ -9,6 +9,5 @@ public interface RequestRepo extends JpaRepository<Request, Integer> {
 
 	@Query("SELECT MAX(r.requestNumber) FROM Request r")
 	String findMaxRequestNumber();
-
 	}
 	
