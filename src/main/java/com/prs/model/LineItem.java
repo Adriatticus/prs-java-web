@@ -4,18 +4,18 @@ import jakarta.persistence.*;
 
 @Entity
 public class LineItem {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int id;
 	@ManyToOne
-	@JoinColumn(name="RequestId")
+	@JoinColumn(name = "RequestId")
 	public Request request;
 	@ManyToOne
-	@JoinColumn(name="ProductId")
+	@JoinColumn(name = "ProductId")
 	public Product product;
 	public int quantity;
-	
+
 	public LineItem() {
 		super();
 	}
@@ -56,5 +56,5 @@ public class LineItem {
 	public String toString() {
 		return "LineItem [id=" + id + ", request=" + request + ", product=" + product + ", quantity=" + quantity + "]";
 	}
-	
+
 }

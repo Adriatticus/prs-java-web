@@ -25,22 +25,22 @@ public class LineItemController {
 	private RequestRepo requestRepo;
 	@Autowired
 	private ProductRepo productRepo;
-		
+
 	@GetMapping("/")
 	public List<LineItem> getAll() {
 		return lineItemRepo.findAll();
 	}
-	
+
 	@GetMapping("/{id}")
 	public Optional<LineItem> getById(@PathVariable int id) {
 		Optional<LineItem> li = lineItemRepo.findById(id);
 		if (li.isPresent()) {
-			return li;			
+			return li;
 		} else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Line item not found for id, "+id+".");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Line item not found for id, " + id + ".");
 		}
 	}
-	
+
 	@PostMapping("")
 	public LineItem add(@RequestBody LineItem lineItem) {
 		LineItem li = new LineItem();
@@ -51,19 +51,19 @@ public class LineItemController {
 		RecalculateRequestTotal(lineItem.getRequest().getId());
 		return li;
 	}
-	
+
 	@PutMapping("/{id}")
 	public void putLineItem(@PathVariable int id, @RequestBody LineItem lineItem) {
 		if (id != lineItem.getId()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Line item id mismatch vs URL.");
-		}
-		else if (lineItemRepo.existsById(lineItem.getId())) {
+		} else if (lineItemRepo.existsById(lineItem.getId())) {
 			lineItemRepo.save(lineItem);
 			RecalculateRequestTotal(lineItem.getRequest().getId());
-		}else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for id, "+id+".");
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for id, " + id + ".");
 		}
 	}
+
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable int id) {
 		LineItem lineItem = lineItemRepo.findById(id).get();
@@ -72,25 +72,26 @@ public class LineItemController {
 			lineItemRepo.deleteById(id);
 			RecalculateRequestTotal(reqId);
 		} else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Line item not found for id, "+id+".");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Line item not found for id, " + id + ".");
 		}
 	}
-	
+
 	@GetMapping("/lines-for-req/{reqId}")
 	public List<LineItem> getLineItemsByReq(@PathVariable int reqId) {
 		List<LineItem> li = lineItemRepo.findAllLineItemsByRequestId(reqId);
 		if (li.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request may be invalid or a valid request may have no line items.");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+					"Request may be invalid or a valid request may have no line items.");
 		}
 		return li;
 	}
-	
+
 	private void RecalculateRequestTotal(int reqId) {
 		Request request = requestRepo.findById(reqId).get();
 		List<LineItem> lineItems = lineItemRepo.findAllLineItemsByRequestId(reqId);
 		double total = 0.0;
 		for (LineItem lineItem : lineItems) {
-			total += lineItem.product.getPrice()*lineItem.quantity;
+			total += lineItem.product.getPrice() * lineItem.quantity;
 		}
 		request.setTotal(total);
 		requestRepo.save(request);

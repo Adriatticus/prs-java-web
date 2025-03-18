@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class User {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
@@ -19,7 +19,7 @@ public class User {
 	private String title;
 	private boolean reviewer;
 	private boolean admin;
-	
+
 	public User() {
 		super();
 	}

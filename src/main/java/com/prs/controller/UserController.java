@@ -39,7 +39,7 @@ public class UserController {
 		if (u.isPresent()) {
 			return u;
 		} else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for id, "+id+".");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for id, " + id + ".");
 		}
 
 	}
@@ -56,7 +56,7 @@ public class UserController {
 		} else if (userRepo.existsById(user.getId())) {
 			userRepo.save(user);
 		} else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for id, "+id+".");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for id, " + id + ".");
 		}
 	}
 
@@ -65,18 +65,17 @@ public class UserController {
 		if (userRepo.existsById(id)) {
 			userRepo.deleteById(id);
 		} else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for id, "+id+".");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for id, " + id + ".");
 		}
 	}
-	
+
 	@PostMapping("/login")
 	public User add(@RequestBody UserLoginDTO userLogin) {
 		User user = userRepo.findByUsernameAndPassword(userLogin.username, userLogin.password);
 		if (user == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid username and/or password");
-		}
-		else {
-			return user;			
+		} else {
+			return user;
 		}
 	}
 

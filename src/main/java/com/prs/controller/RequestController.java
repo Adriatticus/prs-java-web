@@ -15,6 +15,7 @@ import com.prs.db.RequestRepo;
 import com.prs.model.LineItem;
 import com.prs.model.Request;
 import com.prs.model.RequestCreateDTO;
+import com.prs.model.RequestRejectDTO;
 import com.prs.model.RequestStatus;
 
 @CrossOrigin
@@ -75,7 +76,7 @@ public class RequestController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found for id, " + id + ".");
 		}
 	}
-	
+
 	@PutMapping("/submit-review/{id}")
 	public void putRequestSubmitReview(@PathVariable int id) {
 		Request request = requestRepo.findById(id).get();
@@ -85,8 +86,7 @@ public class RequestController {
 			if (request.total <= 50) {
 				request.setStatus(RequestStatus.APPROVED);
 				request.setSubmittedDate(LocalDateTime.now());
-			}
-			else if (request.total > 50) {
+			} else if (request.total > 50) {
 				request.setStatus(RequestStatus.REVIEW);
 				request.setSubmittedDate(LocalDateTime.now());
 
@@ -96,6 +96,7 @@ public class RequestController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found for id, " + id + ".");
 		}
 	}
+
 	@GetMapping("/list-review/{userId}")
 	public List<Request> getLineItemsByReq(@PathVariable int userId) {
 		List<Request> r = requestRepo.listInReview(userId);
@@ -103,6 +104,35 @@ public class RequestController {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nothing to review.");
 		}
 		return r;
+
+	}
+
+	@PutMapping("/approve/{id}")
+	public void putApproveRequest(@PathVariable int id) {
+		Request request = requestRepo.findById(id).get();
+		if (id != request.getId()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request id mismatch vs URL.");
+		} else if (requestRepo.existsById(request.getId())) {
+			request.setStatus(RequestStatus.APPROVED);
+			requestRepo.save(request);
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found for id, " + id + ".");
+		}
+
+	}
+
+	@PutMapping("/reject/{id}")
+	public void putRejectRequest(@PathVariable int id, @RequestBody RequestRejectDTO requestDTO) {
+		Request request = requestRepo.findById(id).get();
+		if (id != request.getId()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request id mismatch vs URL.");
+		} else if (requestRepo.existsById(request.getId())) {
+			request.setStatus(RequestStatus.REJECTED);
+			request.setReasonForRejection(requestDTO.reasonForRejection);
+			requestRepo.save(request);
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found for id, " + id + ".");
+		}
 
 	}
 

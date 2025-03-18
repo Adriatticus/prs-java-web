@@ -9,14 +9,14 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@ManyToOne
-	@JoinColumn(name="VendorID")
+	@JoinColumn(name = "VendorID")
 	private Vendor vendor;
 	private String partNumber;
 	private String name;
 	private Double price;
 	private String unit;
 	private String photoPath;
-	
+
 	public Product() {
 		super();
 	}
@@ -82,7 +82,5 @@ public class Product {
 		return "Product [id=" + id + ", vendor=" + vendor + ", partNumber=" + partNumber + ", name=" + name + ", price="
 				+ price + ", unit=" + unit + ", photoPath=" + photoPath + "]";
 	}
-	
-	
-	
+
 }

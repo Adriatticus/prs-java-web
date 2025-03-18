@@ -16,52 +16,47 @@ import com.prs.model.Product;
 @RequestMapping("/api/products")
 
 public class ProductController {
-	
-	@Autowired 
+
+	@Autowired
 	private ProductRepo productRepo;
-	
+
 	@GetMapping("/")
 	public List<Product> getAll() {
 		return productRepo.findAll();
 	}
-	
+
 	@GetMapping("/{id}")
 	public Optional<Product> getById(@PathVariable int id) {
 		Optional<Product> p = productRepo.findById(id);
 		if (p.isPresent()) {
-			return p;	
-		}
-		else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found for product id, "+id+".");
+			return p;
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found for product id, " + id + ".");
 		}
 	}
-	
+
 	@PostMapping("")
 	public Product add(@RequestBody Product product) {
 		return productRepo.save(product);
 	}
-	
+
 	@PutMapping("/{id}")
 	public void putUser(@PathVariable int id, @RequestBody Product product) {
 		if (id != product.getId()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Product id mismatch vs URL.");
-		}
-		else if (productRepo.existsById(product.getId())) {
+		} else if (productRepo.existsById(product.getId())) {
 			productRepo.save(product);
-		}
-		else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Prodcut not found for id, "+id+".");
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Prodcut not found for id, " + id + ".");
 		}
 	}
+
 	@DeleteMapping("/{id}")
-		public void deleteProduct(@PathVariable int id) {
+	public void deleteProduct(@PathVariable int id) {
 		if (productRepo.existsById(id)) {
 			productRepo.deleteById(id);
-		}
-		else {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found for id, "+id+".");
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found for id, " + id + ".");
 		}
 	}
 }
-		
-

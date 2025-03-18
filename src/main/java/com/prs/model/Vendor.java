@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class Vendor {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;

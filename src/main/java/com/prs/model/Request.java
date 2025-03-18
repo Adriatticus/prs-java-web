@@ -12,7 +12,7 @@ public class Request {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public int id;
 	@ManyToOne
-	@JoinColumn(name="UserId")
+	@JoinColumn(name = "UserId")
 	public User user;
 	public String requestNumber;
 	public String description;
@@ -23,7 +23,7 @@ public class Request {
 	public Double total;
 	public LocalDateTime submittedDate;
 	public String reasonForRejection;
-	
+
 	public Request() {
 		super();
 	}
