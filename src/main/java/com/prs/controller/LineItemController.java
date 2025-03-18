@@ -59,14 +59,18 @@ public class LineItemController {
 		}
 		else if (lineItemRepo.existsById(lineItem.getId())) {
 			lineItemRepo.save(lineItem);
+			RecalculateRequestTotal(lineItem.getRequest().getId());
 		}else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found for id, "+id+".");
 		}
 	}
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable int id) {
+		LineItem lineItem = lineItemRepo.findById(id).get();
+		int reqId = lineItem.getRequest().getId();
 		if (lineItemRepo.existsById(id)) {
 			lineItemRepo.deleteById(id);
+			RecalculateRequestTotal(reqId);
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Line item not found for id, "+id+".");
 		}

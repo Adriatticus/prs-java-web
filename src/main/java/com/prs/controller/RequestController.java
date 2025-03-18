@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.prs.db.RequestRepo;
+import com.prs.model.LineItem;
 import com.prs.model.Request;
 import com.prs.model.RequestCreateDTO;
 import com.prs.model.RequestStatus;
@@ -73,6 +74,36 @@ public class RequestController {
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found for id, " + id + ".");
 		}
+	}
+	
+	@PutMapping("/submit-review/{id}")
+	public void putRequestSubmitReview(@PathVariable int id) {
+		Request request = requestRepo.findById(id).get();
+		if (id != request.getId()) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request id mismatch vs URL.");
+		} else if (requestRepo.existsById(request.getId())) {
+			if (request.total <= 50) {
+				request.setStatus(RequestStatus.APPROVED);
+				request.setSubmittedDate(LocalDateTime.now());
+			}
+			else if (request.total > 50) {
+				request.setStatus(RequestStatus.REVIEW);
+				request.setSubmittedDate(LocalDateTime.now());
+
+			}
+			requestRepo.save(request);
+		} else {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found for id, " + id + ".");
+		}
+	}
+	@GetMapping("/list-review/{userId}")
+	public List<Request> getLineItemsByReq(@PathVariable int userId) {
+		List<Request> r = requestRepo.listInReview(userId);
+		if (r.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nothing to review.");
+		}
+		return r;
+
 	}
 
 	public String ReqNumGen() {
