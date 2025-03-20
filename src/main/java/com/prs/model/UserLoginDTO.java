@@ -2,8 +2,8 @@ package com.prs.model;
 
 public class UserLoginDTO {
 
-	public String username;
-	public String password;
+	private String username;
+	private String password;
 
 	public UserLoginDTO() {
 		super();

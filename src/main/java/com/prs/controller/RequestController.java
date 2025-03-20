@@ -44,12 +44,12 @@ public class RequestController {
 	@PostMapping("")
 	public Request add(@RequestBody RequestCreateDTO requestDTO) {
 		Request r = new Request();
-		r.setUser(requestDTO.user);
+		r.setUser(requestDTO.getUser());
 		r.setRequestNumber(ReqNumGen());
-		r.setDescription(requestDTO.description);
-		r.setJustification(requestDTO.justification);
-		r.setDateNeeded(requestDTO.dateNeeded);
-		r.setDeliveryMode(requestDTO.deliveryMode);
+		r.setDescription(requestDTO.getDescription());
+		r.setJustification(requestDTO.getJustification());
+		r.setDateNeeded(requestDTO.getDateNeeded());
+		r.setDeliveryMode(requestDTO.getDeliveryMode());
 		r.setStatus(RequestStatus.NEW);
 		r.setSubmittedDate(LocalDateTime.now());
 		r.setTotal(0.0);
@@ -83,10 +83,10 @@ public class RequestController {
 		if (id != request.getId()) {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request id mismatch vs URL.");
 		} else if (requestRepo.existsById(request.getId())) {
-			if (request.total <= 50) {
+			if (request.getTotal() <= 50) {
 				request.setStatus(RequestStatus.APPROVED);
 				request.setSubmittedDate(LocalDateTime.now());
-			} else if (request.total > 50) {
+			} else if (request.getTotal() > 50) {
 				request.setStatus(RequestStatus.REVIEW);
 				request.setSubmittedDate(LocalDateTime.now());
 
@@ -128,7 +128,7 @@ public class RequestController {
 			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request id mismatch vs URL.");
 		} else if (requestRepo.existsById(request.getId())) {
 			request.setStatus(RequestStatus.REJECTED);
-			request.setReasonForRejection(requestDTO.reasonForRejection);
+			request.setReasonForRejection(requestDTO.getReasonForRejection());
 			requestRepo.save(request);
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request not found for id, " + id + ".");

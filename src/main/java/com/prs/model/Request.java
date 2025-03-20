@@ -13,16 +13,16 @@ public class Request {
 	public int id;
 	@ManyToOne
 	@JoinColumn(name = "UserId")
-	public User user;
-	public String requestNumber;
-	public String description;
-	public String justification;
-	public LocalDate dateNeeded;
-	public String deliveryMode;
-	public String status;
-	public Double total;
-	public LocalDateTime submittedDate;
-	public String reasonForRejection;
+	private User user;
+	private String requestNumber;
+	private String description;
+	private String justification;
+	private LocalDate dateNeeded;
+	private String deliveryMode;
+	private String status;
+	private Double total;
+	private LocalDateTime submittedDate;
+	private String reasonForRejection;
 
 	public Request() {
 		super();

@@ -9,11 +9,11 @@ public class RequestCreateDTO {
 
 	@ManyToOne
 	@JoinColumn(name = "UserId")
-	public User user;
-	public String description;
-	public String justification;
-	public LocalDate dateNeeded;
-	public String deliveryMode;
+	private User user;
+	private String description;
+	private String justification;
+	private LocalDate dateNeeded;
+	private String deliveryMode;
 
 	public RequestCreateDTO() {
 		super();
