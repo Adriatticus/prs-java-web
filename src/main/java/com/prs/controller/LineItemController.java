@@ -79,10 +79,10 @@ public class LineItemController {
 	@GetMapping("/lines-for-req/{reqId}")
 	public List<LineItem> getLineItemsByReq(@PathVariable int reqId) {
 		List<LineItem> li = lineItemRepo.findAllLineItemsByRequestId(reqId);
-		if (li.isEmpty()) {
-			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-					"Request may be invalid or a valid request may have no line items.");
-		}
+//		if (li.isEmpty()) {
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+//					"Request may be invalid or a valid request may have no line items.");
+//		}
 		return li;
 	}
 
