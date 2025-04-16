@@ -71,7 +71,7 @@ public class UserController {
 
 	@PostMapping("/login")
 	public User add(@RequestBody UserLoginDTO userLogin) {
-		User user = userRepo.findByUsernameAndPassword(userLogin.username, userLogin.password);
+		User user = userRepo.findByUsernameAndPassword(userLogin.getUsername(), userLogin.getPassword());
 		if (user == null) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid username and/or password");
 		} else {

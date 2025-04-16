@@ -7,14 +7,14 @@ public class LineItem {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	public int id;
+	private int id;
 	@ManyToOne
 	@JoinColumn(name = "RequestId")
-	public Request request;
+	private Request request;
 	@ManyToOne
 	@JoinColumn(name = "ProductId")
-	public Product product;
-	public int quantity;
+	private Product product;
+	private int quantity;
 
 	public LineItem() {
 		super();

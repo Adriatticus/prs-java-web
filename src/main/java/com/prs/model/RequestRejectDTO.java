@@ -2,7 +2,7 @@ package com.prs.model;
 
 public class RequestRejectDTO {
 
-	public String reasonForRejection;
+	private String reasonForRejection;
 
 	public RequestRejectDTO() {
 		super();

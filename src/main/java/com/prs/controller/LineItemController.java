@@ -91,7 +91,7 @@ public class LineItemController {
 		List<LineItem> lineItems = lineItemRepo.findAllLineItemsByRequestId(reqId);
 		double total = 0.0;
 		for (LineItem lineItem : lineItems) {
-			total += lineItem.product.getPrice() * lineItem.quantity;
+			total += lineItem.getProduct().getPrice() * lineItem.getQuantity();
 		}
 		request.setTotal(total);
 		requestRepo.save(request);
